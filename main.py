@@ -18,10 +18,10 @@ for p,cnt in zip(game_json["getPointPlayer"], game_json["rallyCnt"]):
     score = pmger.get_score()
     output.append("{},{},{}".format(score["p1p"], score["p2p"], cnt))
 
-with open("normal.csv", "w") as f:
+with open("output/normal.csv", "w") as f:
     f.write("\n".join(output))
 
-with open("memo.txt", "w") as f:
+with open("output/memo.txt", "w") as f:
     f.write(game_json["memo"])
 
 #  ラリー内容 2シート目
@@ -49,17 +49,21 @@ for i, p in enumerate(game_json["getPointPlayer"]):
 
     # 打球位置はサーブかどうかで変わる
     tmp = ["打球位置"]
-    tmp.append(const.hitPostionAtServe[hits_list["hitPosition"][0]])
-    for i in range(1, len(hits_list["hitPosition"])):
-        tmp.append(const.hitPostion[hits_list["hitPosition"][i]])
+    for isServe, hitPosition in zip(hits_list["isServe"], hits_list["hitPosition"]):
+        if isServe:
+            tmp.append(const.hitPostionAtServe[hitPosition])
+        else:
+            tmp.append(const.hitPostion[hitPosition])
     output.append(",".join(tmp))
 
     output.append(",".join(["フォアorバック"] + [const.handList[i] for i in hits_list["hand"]]))
     
     tmp = ["打法"]
-    tmp.append(const.serveList[hits_list["hitStyle"][0]])
-    for i in range(1, len(hits_list["hitStyle"])):
-        tmp.append(const.hitsStyleList[hits_list["hitStyle"][i]])
+    for isServe, hitStyle in zip(hits_list["isServe"], hits_list["hitStyle"]):
+        if isServe:
+            tmp.append(const.serveList[hitStyle])
+        else:
+            tmp.append(const.hitsStyleList[hitStyle])
     output.append(",".join(tmp))
 
     output.append(",".join(["コース"] + [const.courseList[i] for i in hits_list["course"]]))
@@ -74,6 +78,6 @@ for i, p in enumerate(game_json["getPointPlayer"]):
     output.append(",".join(tmp))
     output.append("")
 
-with open("detail.csv", "w") as f:
+with open("output/detail.csv", "w") as f:
     f.write("\n".join(output))
 
