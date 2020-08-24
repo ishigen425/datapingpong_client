@@ -1,12 +1,12 @@
-import json,os
+import json,os,sys
 
 import requests
 
 import const
 from point_manager import PointManager
 
-
-response = requests.get(const.URL.format("rvRyQg93CljQsdxzla89"))
+assert len(sys.argv) == 2
+response = requests.get(const.URL.format(sys.argv[1]))
 
 game_json = json.loads(response.text)
 players = [game_json["player1"], game_json["player2"]]
