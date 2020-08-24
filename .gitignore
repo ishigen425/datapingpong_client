@@ -1,3 +1,5 @@
 bk/
 __pycache__/
+client/
+.vscode/
 
